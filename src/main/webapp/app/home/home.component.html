@@ -1,0 +1,34 @@
+<div class="row">
+    <div class="col-md-3">
+        <span class="hipster img-fluid rounded"></span>
+    </div>
+    <div class="col-md-9">
+    <h3 >WELCOME TO INITIATION OF PPE ACT PORTAL!</h3>
+        <p class="lead">This is your homepage</p>
+
+        <div [ngSwitch]="isAuthenticated()">
+            <div class="alert alert-success" *ngSwitchCase="true">
+                <span *ngIf="account"
+                   > You are logged in as user "{{account.login}}". </span>
+            </div>
+
+            <div class="alert alert-warning" *ngSwitchCase="false">
+                <span>If you want to </span>
+                <a class="alert-link" (click)="login()">sign in</a><span>, you can try the default accounts:<br/>- Administrator (login="admin" and password="admin") <br/>- User (login="user" and password="user").</span>
+            </div>
+            <div class="alert alert-warning" *ngSwitchCase="false">
+                <span>You don't have an account yet?</span>&nbsp;
+                <a class="alert-link" routerLink="register">Register a new account</a>
+            </div>
+        </div>
+
+        <p>
+        If you have any question on Please Contact:	Mumbai Port Trust Life Line No for 24 x 7 x 365 : 66565656
+        </p>
+
+        <ul>       <a href="http://mumbaiport.gov.in/" target="_blank" rel="noopener">Mumbai Port Trust</a>
+        </ul>
+
+       
+    </div>
+</div>

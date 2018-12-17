@@ -1,0 +1,84 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <form name="editForm" role="form" novalidate (ngSubmit)="save()" #editForm="ngForm">
+            <h4 id="jhi-custstatus-heading">Create or edit a Customer PPE Status</h4>
+            <div>
+                <jhi-alert-error></jhi-alert-error>
+                <div class="form-group" [hidden]="!cUSTSTATUS.id">
+                    <label for="id">ID</label>
+                    <input type="text" class="form-control" id="id" name="id"
+                        [(ngModel)]="cUSTSTATUS.id" readonly />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" for="field_custId">Customer Id</label>
+                    <input type="number" class="form-control" name="custId" id="field_custId"
+                        [(ngModel)]="cUSTSTATUS.custId" required/>
+                    <div [hidden]="!(editForm.controls.custId?.dirty && editForm.controls.custId?.invalid)">
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.custId?.errors?.required">
+                        This field is required.
+                        </small>
+                        <small class="form-text text-danger"
+                            [hidden]="!editForm.controls.custId?.errors?.number">
+                            This field should be a number.
+                        </small>
+                    </div>
+                </div>
+            <div class="form-group">
+                <label class="form-control-label" for="field_ppeStatus">PPE Status</label>
+               <select class="form-control" name="ppeStatus" id="field_ppeStatus" 
+               		[(ngModel)]="cUSTSTATUS.ppeStatus">
+               		 <option *ngFor="let state of statusArray"   value="{{state}}"> {{state}}</option>
+                 </select>
+             </div>
+              
+                <div class="form-group">
+                    <label class="form-control-label" for="field_changeDt">Status Change Date</label>
+                    <div class="input-group">
+                        <input id="field_changeDt" type="text" class="form-control" name="changeDt" ngbDatepicker  #changeDtDp="ngbDatepicker" [(ngModel)]="cUSTSTATUS.changeDt"
+                        />
+                        <span class="input-group-append">
+                            <button type="button" class="btn btn-secondary" (click)="changeDtDp.toggle()"><fa-icon [icon]="'calendar-alt'"></fa-icon></button>
+                        </span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" for="field_userId">User Id</label>
+                    <input type="text" class="form-control" name="userId" id="field_userId"
+                        [(ngModel)]="cUSTSTATUS.userId" required/>
+                    <div [hidden]="!(editForm.controls.userId?.dirty && editForm.controls.userId?.invalid)">
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.userId?.errors?.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+
+            </div>
+            <div>
+                <button type="button" id="cancel-save" class="btn btn-secondary"  (click)="previousState()">
+                    <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span>Cancel</span>
+                </button>
+                <button type="submit" id="save-entity" [disabled]="editForm.form.invalid || isSaving" class="btn btn-primary">
+                    <fa-icon [icon]="'save'"></fa-icon>&nbsp;<span>Save</span>
+                </button>
+            </div>
+            
+            
+            <table class="table table-striped">
+           <tbody>
+           <div *ngFor="let x of cUSTSTATUSES">
+            <tr *ngIf="x.custId === cUSTSTATUS.custId">
+            <td width="155px">{{x.custId}}  </td>
+            <td width="500px">{{x.ppeStatus}}  </td>
+            <td width="150px">{{x.changeDt | date:'mediumDate'}}  </td>
+            <td width="300px">{{x.userId}}</td>
+            </tr>
+            </div>
+            </tbody>
+            </table>
+           
+            
+        </form>
+    </div>
+</div>

@@ -1,0 +1,192 @@
+<div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+    <h4 id="page-heading">
+        <span>Customer PPE Act Status List</span>
+        <button id="jh-create-entity" class="btn btn-info btn-sm float-right" [routerLink]="['/custstatus/new']">
+        <fa-icon [icon]="'plus'"></fa-icon>
+        <span >
+        Create new Customer PPE Status
+        </span>
+        </button>
+    </h4>
+    <jhi-alert></jhi-alert>
+    <br/>
+    <div >
+   <table>
+        <td width="50px"><label>All</label>
+        </td>
+        <td align="left" width="30px">
+        <input type="checkbox"  class="form-control" name="checked" id="checked" [(ngModel)]="checked" ng-init="checked=true" />
+        </td>
+        <td width="50px"></td>
+        <td *ngIf="!checked" class="animate-if"  width="100px"><label>Unit No:</label></td>
+        <td *ngIf="!checked"><input type="number" class="form-control" name="unitNo" id="unit_NO" 
+        [(ngModel)]="unitNo"  (change)="unitOnChange()" width="100px"/>
+      
+        <td width="50px"></td>
+        <td width="100px"><label>Only Last Status</label>
+        <td align="left" width="30px">
+        <input type="checkbox"  class="form-control" name="latest" id="latest" [(ngModel)]="latest" ng-init="latest=true" 
+        (change)="getOnlyLatestPpe()" />
+        </td>
+  </table>
+      	<table>
+      	</table>
+   <table>
+      <tr><span width="200px" *ngIf="close"><button  class="btn btn-info btn-sm float-right" (click)="close=false">Show Summary</button></span></tr>
+      <tr><span width="200px" *ngIf="!close"><button  class="btn btn-info btn-sm float-right" (click)="close=true">Close Summary</button></span></tr>
+     
+      <tr> Summary Report </tr>  
+      <tr>    
+      <th align="left" width="100px">Unit No</th>
+      <th align="left" width="550px">PPE Status</th>
+      <th align="left" width="100px">No of Customers</th>
+      <th align="left" width="100px">Average No	of days</th>
+      </tr>
+      <tr *ngFor="let item of sUMMARY;">
+      <span style="width:100%" *ngIf="!close">
+      <td>{{item.unitId }}</td>    <td>{{item.ppeStatus}}</td>    <td>{{item.nosCus }}</td>    <td>{{item.avgDays }}</td>
+      </span>
+      </tr>
+      
+   </table>
+      
+      <table>
+      </table>
+    <table>
+            <thead>
+            <tr>
+            <span style="width:100%">
+            <th align="left" width="155px">Customer Id</th>
+            <th align="left" width="500px">PPE Status</th>
+            <th align="left" width="150px">Change Date</th>
+            <th align="left" width="300px">User Id</th>
+            <th align="left" width="90px">Days</th>
+            <th width="150px"></th>
+            </span>
+            </tr>
+            </thead>
+            <tbody *ngIf="!latest">
+            <tr *ngFor="let cUSTSTATUS of cUSTSTATUSES ;trackBy: trackId">
+             <span style="width:100%" *ngIf="!checked && pipe.transform(cUSTSTATUS.custId) === unitNo"> 
+             {{addCustStatus(cUSTSTATUS)}}
+                <td width="155px">{{cUSTSTATUS.custId}}</td>
+                <td width="500px">{{cUSTSTATUS.ppeStatus}}</td>
+                <td width="150px">{{cUSTSTATUS.changeDt | date:'mediumDate'}}</td>
+                <td width="300px">{{cUSTSTATUS.userId}}</td>
+                <td width="90px">{{cUSTSTATUS.days}}</td>
+                <td class="text-right" width="150px">
+                    <div class="btn-group flex-btn-group-container">
+                         <button type="submit"
+                                [routerLink]="['/custstatus', cUSTSTATUS.id, 'edit']"
+                                class="btn btn-info btn-sm">
+                            <fa-icon [icon]="'pencil-alt'"></fa-icon>
+                            <span class="d-none d-md-inline">Edit</span>
+                        </button>
+                        <button type="submit"
+                                [routerLink]="['/', { outlets: { popup: 'custstatus/'+ cUSTSTATUS.id + '/delete'} }]"
+                                replaceUrl="true"
+                                queryParamsHandling="merge"
+                              class="btn btn-info btn-sm">
+                            <fa-icon [icon]="'times'"></fa-icon>
+                            <span class="d-none d-md-inline">Delete</span>
+                        </button>
+                    </div>
+                </td>
+               </span>
+               
+               <span style="width:100%" *ngIf="checked">
+               <td width="155px">{{cUSTSTATUS.custId}}</td>
+               <td width="500px">{{cUSTSTATUS.ppeStatus}}</td>
+               <td width="150px">{{cUSTSTATUS.changeDt | date:'mediumDate'}}</td>
+               <td width="300px">{{cUSTSTATUS.userId}}</td>
+               <td width="90px">{{cUSTSTATUS.days}}</td>
+               <td class="text-right" width="150px">
+                   <div class="btn-group flex-btn-group-container">
+                        <button type="submit"
+                               [routerLink]="['/custstatus', cUSTSTATUS.id, 'edit']"
+                               class="btn btn-info btn-sm">
+                           <fa-icon [icon]="'pencil-alt'"></fa-icon>
+                           <span class="d-none d-md-inline">Edit</span>
+                       </button>
+                       <button type="submit"
+                               [routerLink]="['/', { outlets: { popup: 'custstatus/'+ cUSTSTATUS.id + '/delete'} }]"
+                               replaceUrl="true"
+                               queryParamsHandling="merge"
+                             class="btn btn-info btn-sm">
+                           <fa-icon [icon]="'times'"></fa-icon>
+                           <span class="d-none d-md-inline">Delete</span>
+                       </button>
+                   </div>
+               </td>
+              </span>
+             </tr>
+            </tbody>
+            
+            <tbody *ngIf="latest">
+            <tr *ngFor="let cUSTSTATUSLAST of cUSTSTATUSESLAST ">
+            <span style="width:100%" *ngIf="checked">
+            <td width="155px">{{cUSTSTATUSLAST.custId}}</td>
+            <td width="500px">{{cUSTSTATUSLAST.ppeStatus}}</td>
+            <td width="150px">{{cUSTSTATUSLAST.changeDt | date:'mediumDate'}}</td>
+            <td width="300px">{{cUSTSTATUSLAST.userId}}</td>
+            <td width="90px">{{cUSTSTATUSLAST.days}}</td>
+            <td class="text-right" width="150px">
+                <div class="btn-group flex-btn-group-container">
+                     <button type="submit"
+                            [routerLink]="['/custstatus', cUSTSTATUSLAST.id, 'edit']"
+                            class="btn btn-info btn-sm">
+                        <fa-icon [icon]="'pencil-alt'"></fa-icon>
+                        <span class="d-none d-md-inline">Edit</span>
+                    </button>
+                    <button type="submit"
+                            [routerLink]="['/', { outlets: { popup: 'custstatus/'+ cUSTSTATUSLAST.id + '/delete'} }]"
+                            replaceUrl="true"
+                            queryParamsHandling="merge"
+                          class="btn btn-info btn-sm">
+                        <fa-icon [icon]="'times'"></fa-icon>
+                        <span class="d-none d-md-inline">Delete</span>
+                    </button>
+                </div>
+            </td>
+           </span>
+           
+           <span style="width:100%" *ngIf="!checked && pipe.transform(cUSTSTATUSLAST.custId) === unitNo"> 
+           {{addCustStatusLastest(cUSTSTATUSLAST)}}
+              <td width="155px">{{cUSTSTATUSLAST.custId}}</td>
+              <td width="500px">{{cUSTSTATUSLAST.ppeStatus}}</td>
+              <td width="150px">{{cUSTSTATUSLAST.changeDt | date:'mediumDate'}}</td>
+              <td width="300px">{{cUSTSTATUSLAST.userId}}</td>
+              <td width="90px">{{cUSTSTATUSLAST.days}}</td>
+              <td class="text-right" width="150px">
+                  <div class="btn-group flex-btn-group-container">
+                       <button type="submit"
+                              [routerLink]="['/custstatus', cUSTSTATUSLAST.id, 'edit']"
+                              class="btn btn-info btn-sm">
+                          <fa-icon [icon]="'pencil-alt'"></fa-icon>
+                          <span class="d-none d-md-inline">Edit</span>
+                      </button>
+                      <button type="submit"
+                              [routerLink]="['/', { outlets: { popup: 'custstatus/'+ cUSTSTATUSLAST.id + '/delete'} }]"
+                              repl
+                              aceUrl="true"
+                              queryParamsHandling="merge"
+                            class="btn btn-info btn-sm">
+                          <fa-icon [icon]="'times'"></fa-icon>
+                          <span class="d-none d-md-inline">Delete</span>
+                      </button>
+                  </div>
+              </td>
+             </span>
+           </tr>
+           </tbody>
+     </table>
+        <span *ngIf="checked && !latest" class="animate-if"  width="100px"> <button class="btn btn-info btn-sm float-right" (click)="downloadDataAll()">Export All to File </button></span>
+        <span *ngIf="!checked && !latest" class="animate-if"  width="100px"> <button class="btn btn-info btn-sm float-right" (click)="downloadDataSelected()">Export Selected Unit to File </button></span>
+        <span *ngIf="checked && latest" class="animate-if"  width="100px"> <button  class="btn btn-info btn-sm float-right" (click)="downloadAllLatest()">Export Latest Status Report of All</button></span>
+        <span *ngIf="!checked && latest" class="animate-if"  width="100px"> <button class="btn btn-info btn-sm float-right" (click)="downloadSelectedLatest()">Export Latest Status Report of Selected Unit</button></span>
+
+    </div>
+    
+</div>
